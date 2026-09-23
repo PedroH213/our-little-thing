@@ -806,3 +806,227 @@ button:disabled {
     width: 100%;
   }
 }
+
+
+/* Vivian Profile */
+.profile-page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: var(--spacing-56) var(--spacing-24) var(--spacing-80);
+  background: var(--color-obsidian-canvas);
+  color: var(--color-bone);
+}
+
+.profile-shell {
+  width: min(720px, 100%);
+  margin: 0 auto;
+}
+
+.profile-top-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--spacing-24);
+  padding-bottom: var(--spacing-24);
+  margin-bottom: var(--spacing-24);
+  border-bottom: 1px solid var(--color-ash-stroke);
+}
+
+.profile-top-bar h1 {
+  margin: var(--spacing-16) 0 0;
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg);
+  letter-spacing: var(--tracking-heading-lg);
+  font-weight: 400;
+}
+
+.profile-logout {
+  color: var(--color-warm-granite);
+}
+
+.profile-card {
+  padding: var(--spacing-40);
+  background: var(--color-chalk);
+  color: var(--color-carbon-lift);
+  border-color: var(--color-ash-stroke);
+}
+
+.profile-avatar-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-24);
+  padding-bottom: var(--spacing-32);
+  margin-bottom: var(--spacing-32);
+  border-bottom: 1px solid var(--color-pale-stone);
+}
+
+.profile-avatar {
+  width: 104px;
+  height: 104px;
+  flex: 0 0 104px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-avatar-placeholder {
+  display: grid;
+  place-items: center;
+  background: var(--color-carbon-lift);
+  color: var(--color-bone);
+  font-family: var(--font-geist-mono);
+  font-size: var(--text-heading);
+}
+
+.profile-avatar-copy {
+  display: grid;
+  gap: var(--spacing-8);
+}
+
+.profile-avatar-copy .eyebrow {
+  color: var(--color-signal-orange);
+}
+
+.profile-avatar-copy p {
+  margin: 0;
+  font-size: var(--text-body-sm);
+}
+
+.profile-file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.profile-upload-button {
+  justify-self: start;
+  color: var(--color-carbon-lift);
+  border-bottom: 1px solid var(--color-pale-stone);
+}
+
+.profile-upload-button:hover:not(:disabled) {
+  color: var(--color-signal-orange);
+}
+
+.profile-pending {
+  color: var(--color-metric-green);
+  font-family: var(--font-geist-mono);
+  font-size: var(--text-caption);
+}
+
+.profile-form {
+  display: grid;
+  gap: var(--spacing-24);
+}
+
+.profile-field {
+  display: grid;
+  gap: var(--spacing-8);
+}
+
+.profile-field .eyebrow {
+  color: var(--color-graphite-mid);
+}
+
+.profile-card .field {
+  background: var(--color-chalk);
+  color: var(--color-carbon-lift);
+  border-color: var(--color-pale-stone);
+}
+
+.profile-card .field:focus {
+  border-color: var(--color-signal-orange);
+}
+
+.profile-bio {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.profile-hint,
+.profile-counter {
+  color: var(--color-warm-granite);
+  font-size: var(--text-caption);
+  font-family: var(--font-geist-mono);
+}
+
+.profile-hint-error,
+.profile-message-error {
+  color: var(--color-signal-orange);
+}
+
+.profile-hint-success,
+.profile-message-success {
+  color: var(--color-metric-green);
+}
+
+.profile-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+  padding-top: var(--spacing-8);
+}
+
+.profile-actions .btn-primary {
+  background: var(--color-carbon-lift);
+  color: var(--color-bone);
+}
+
+.profile-upload-status {
+  color: var(--color-warm-granite);
+  font-family: var(--font-geist-mono);
+  font-size: var(--text-caption);
+  text-transform: uppercase;
+}
+
+.profile-message {
+  margin-bottom: var(--spacing-16);
+  padding: 12px 14px;
+  border: 1px solid var(--color-ash-stroke);
+  border-radius: var(--radius-sm);
+  background: var(--color-carbon-lift);
+  font-family: var(--font-geist-mono);
+  font-size: var(--text-caption);
+}
+
+.profile-loading {
+  padding: var(--spacing-80) 0;
+  text-align: center;
+}
+
+.profile-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-24);
+  font-family: var(--font-geist-mono);
+  font-size: var(--text-caption);
+}
+
+@media (max-width: 560px) {
+  .profile-page {
+    padding: var(--spacing-32) var(--spacing-16) var(--spacing-56);
+  }
+
+  .profile-card {
+    padding: var(--spacing-24);
+  }
+
+  .profile-avatar-section {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .profile-top-bar {
+    align-items: flex-start;
+  }
+
+  .profile-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .profile-actions .btn-primary {
+    width: 100%;
+  }
+}
