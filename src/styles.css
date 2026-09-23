@@ -370,3 +370,9 @@
     width: 100%;
   }
 }
+
+
+.auth-page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#101010}
+.auth-card{width:min(440px,100%);background:#eee;padding:32px;border:1px solid #222}
+.auth-card h1{margin:8px 0}
+.auth-form{display:grid;gap:12px;margin:24px 0}
