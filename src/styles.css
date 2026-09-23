@@ -617,6 +617,20 @@ button:disabled {
   font-weight: 400;
 }
 
+.feed-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-24);
+}
+
+.feed-header-actions .btn-ghost {
+  color: var(--color-bone);
+}
+
+.feed-header-actions .btn-ghost:hover {
+  color: var(--color-signal-orange);
+}
+
 .feed-header .status-pulse {
   display: inline-block;
   margin-top: var(--spacing-16);
