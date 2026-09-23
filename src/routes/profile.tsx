@@ -154,13 +154,15 @@ function ProfilePage() {
     setSuccess(null);
   }
 
-  async function checkUsernameAvailability(value = username) {
+  async function checkUsernameAvailability(
+    value = username,
+  ): Promise<"available" | "taken" | "invalid"> {
     const normalized = value.trim().toLowerCase();
     const validationError = validateUsername(normalized);
 
     if (validationError) {
       setUsernameState("idle");
-      return false;
+      return "invalid";
     }
 
     const {
@@ -168,8 +170,7 @@ function ProfilePage() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      setError("Sua sessão expirou. Entre novamente.");
-      return false;
+      throw new Error("Sua sessão expirou. Entre novamente.");
     }
 
     setUsernameState("checking");
@@ -181,19 +182,15 @@ function ProfilePage() {
       .neq("id", user.id)
       .maybeSingle();
 
-    if (queryError) {
-      setUsernameState("idle");
-      setError(queryError.message);
-      return false;
-    }
+    if (queryError) throw queryError;
 
     if (data) {
       setUsernameState("taken");
-      return false;
+      return "taken";
     }
 
     setUsernameState("available");
-    return true;
+    return "available";
   }
 
   async function handleAvatarChange(event: ChangeEvent<HTMLInputElement>) {
@@ -274,13 +271,13 @@ function ProfilePage() {
         throw new Error("Sua sessão expirou. Entre novamente.");
       }
 
-      const available = await checkUsernameAvailability(normalizedUsername);
+      const availability = await checkUsernameAvailability(normalizedUsername);
 
-      if (!available) {
+      if (availability !== "available") {
         throw new Error(
-          usernameState === "taken"
+          availability === "taken"
             ? "Esse username já está em uso."
-            : "Não foi possível confirmar a disponibilidade do username.",
+            : "O username informado não é válido.",
         );
       }
 
@@ -470,7 +467,16 @@ function ProfilePage() {
                 className="field"
                 value={username}
                 onChange={(event) => handleUsernameChange(event.target.value)}
-                onBlur={() => void checkUsernameAvailability()}
+                onBlur={() =>
+                  void checkUsernameAvailability().catch((err) => {
+                    setUsernameState("idle");
+                    setError(
+                      err instanceof Error
+                        ? err.message
+                        : "Não foi possível verificar o username.",
+                    );
+                  })
+                }
                 minLength={3}
                 maxLength={20}
                 autoCapitalize="none"
