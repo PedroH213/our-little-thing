@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { supabase } from "../lib/supabase";
 
 type Profile = {
@@ -15,13 +15,6 @@ type Profile = {
 type UsernameState = "idle" | "checking" | "available" | "taken";
 
 export const Route = createFileRoute("/profile")({
-  beforeLoad: async () => {
-    const { data } = await supabase.auth.getSession();
-
-    if (!data.session) {
-      throw redirect({ to: "/" });
-    }
-  },
   component: ProfilePage,
 });
 
@@ -85,7 +78,8 @@ function ProfilePage() {
         } = await supabase.auth.getUser();
 
         if (!user) {
-          throw new Error("Sua sessão expirou. Entre novamente.");
+          void navigate({ to: "/", replace: true });
+          return;
         }
 
         const { data, error: profileError } = await supabase
@@ -347,7 +341,7 @@ function ProfilePage() {
     setLoggingOut(true);
     setError(null);
 
-    const { error: logoutError } = await supabase.auth.signOut();
+    const { error: logoutError } = await supabase.auth.signOut({ scope: "local" });
 
     if (logoutError) {
       setError(logoutError.message);
