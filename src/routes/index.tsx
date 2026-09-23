@@ -1,24 +1,59 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { supabase } from "../lib/supabase";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
-export const Route = createFileRoute("/")({
-  component: Index,
-});
+export const Route = createFileRoute("/")({ component: HomePage });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function HomePage() {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) void navigate({ to: "/feed", replace: true });
+    });
+  }, [navigate]);
+
+  async function submit() {
+    setLoading(true);
+    setMessage(null);
+    const result = mode === "login"
+      ? await supabase.auth.signInWithPassword({ email, password })
+      : await supabase.auth.signUp({ email, password });
+
+    if (result.error) {
+      setMessage(result.error.message);
+    } else if (mode === "signup") {
+      setMessage(result.data.session ? "Conta criada. Entrando..." : "Conta criada. Confira seu e-mail para confirmar o cadastro.");
+      if (result.data.session) void navigate({ to: "/feed", replace: true });
+    } else {
+      void navigate({ to: "/feed", replace: true });
+    }
+    setLoading(false);
+  }
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="auth-page">
+      <section className="auth-card">
+        <span className="eyebrow">VIVIAN</span>
+        <h1>{mode === "login" ? "Entrar" : "Criar conta"}</h1>
+        <p className="muted">Seu espaço privado para compartilhar momentos.</p>
+        <div className="auth-form">
+          <input className="field" type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} autoComplete="email" />
+          <input className="field" type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete={mode === "login" ? "current-password" : "new-password"} />
+          <button className="btn-primary" onClick={() => void submit()} disabled={loading || !email || !password}>
+            {loading ? "Aguarde..." : mode === "login" ? "Entrar" : "Criar conta"}
+          </button>
+        </div>
+        {message && <p className="feed-error">{message}</p>}
+        <button className="btn-ghost" onClick={() => { setMode(mode === "login" ? "signup" : "login"); setMessage(null); }}>
+          {mode === "login" ? "Ainda não tenho uma conta" : "Já tenho uma conta"}
+        </button>
+      </section>
+    </main>
   );
 }
