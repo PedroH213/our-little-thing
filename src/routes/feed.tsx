@@ -1,5 +1,5 @@
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { supabase } from "../lib/supabase";
 
 type FeedPost = {
@@ -260,7 +260,13 @@ function FeedPage() {
             <span className="eyebrow">VIVIAN / FEED</span>
             <h1>Feed</h1>
           </div>
-          <span className="status-pulse">ONLINE</span>
+
+          <div className="feed-header-actions">
+            <Link className="btn-ghost" to="/profile">
+              Perfil
+            </Link>
+            <span className="status-pulse">ONLINE</span>
+          </div>
         </header>
 
         <section className="card feed-composer">
